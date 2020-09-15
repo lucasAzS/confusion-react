@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
+ dependabot/npm_and_yarn/testing-library/react-11.0.4
     "@testing-library/react": "^11.0.2",
     "@testing-library/user-event": "^12.1.5",
+ master
     "bootstrap": "^4.5.0",
     "bootstrap-social": "^5.1.1",
     "font-awesome": "^4.7.0",

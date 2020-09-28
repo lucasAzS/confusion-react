@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
@@ -28,43 +29,65 @@ const minLength = (len) => (val) => val && val.length >= len;
 function RenderDish({ dish }) {
     if (dish != null)
         return (
-            <Card>
-                <CardImg top src={baseUrl + dish.image} alt={dish.name} />
-                <CardBody>
-                    <CardTitle>{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
+            <div className='col-12 col-md-5 m-1'>
+                <FadeTransform
+                    in
+                    transformProps={{
+                        exitTransform: 'scale(0.5) translateY(-50%)',
+                    }}
+                >
+                    <Card>
+                        <CardImg
+                            top
+                            src={baseUrl + dish.image}
+                            alt={dish.name}
+                        />
+                        <CardBody>
+                            <CardTitle>{dish.name}</CardTitle>
+                            <CardText>{dish.description}</CardText>
+                        </CardBody>
+                    </Card>
+                </FadeTransform>
+            </div>
         );
     else return <div></div>;
 }
 
 function RenderComments({ comments, postComment, dishId }) {
     if (comments != null) {
-        return (
-            <div>
-                <h4>Comments</h4>
+        let commentList = (
+            <Stagger in>
                 {comments.map((comment) => {
                     return (
-                        <ul key={comment.id} className='list-unstyled'>
-                            <li>{comment.comment}</li>
+                        <Fade in key={comment.id}>
                             <li>
-                                -- {comment.author},{' '}
-                                {new Intl.DateTimeFormat('en-US', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: '2-digit',
-                                }).format(new Date(Date.parse(comment.date)))}
+                                <p>{comment.comment}</p>
+                                <p>
+                                    -- {comment.author} ,{' '}
+                                    {new Intl.DateTimeFormat('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: '2-digit',
+                                    }).format(
+                                        new Date(Date.parse(comment.date))
+                                    )}
+                                </p>
                             </li>
-                        </ul>
+                        </Fade>
                     );
                 })}
-
-                <CommentForm dishId={dishId} postComment={postComment} />
-            </div>
+            </Stagger>
         );
-    }
+        return (
+            <React.Fragment>
+                <h3>Comments</h3>
+                <ul className='list-unstyled'>{commentList}</ul>
+                <CommentForm dishId={dishId} postComment={postComment} />
+            </React.Fragment>
+        );
+    } else return <div></div>;
 }
+
 const DishDetail = (props) => {
     if (props.isLoading) {
         return (

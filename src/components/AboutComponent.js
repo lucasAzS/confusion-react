@@ -9,26 +9,47 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-const RenderLeader = ({ leader }) => {
-    return (
-        <div key={leader.id} className='col-12 mt-5'>
-            <Media tag='li'>
-                <Media left middle>
-                    <Media object src={leader.image} alt={leader.name} />
-                </Media>
-                <Media body className='col-12'>
-                    <Media heading>{leader.name}</Media>
-                    <p>{leader.designation}</p>
-                    <p>{leader.description}</p>
-                </Media>
-            </Media>
-        </div>
-    );
+import { Fade, Stagger } from 'react-animation-components';
+import { baseUrl } from '../shared/baseUrl';
+
+const leaderImg = {
+    height: '105px',
+    width: '105px',
+    minHeight: '105px',
+    maxHeight: '105px',
+    minWidth: '105px',
+    maxWidth: '105px',
 };
 
+function RenderLeader({ leader }) {
+    return (
+        <Stagger in>
+            <Fade in>
+                <div key={leader.id} className='col-12 mt-5'>
+                    <Media tag='li'>
+                        <Media left middle>
+                            <Media
+                                style={leaderImg}
+                                object
+                                src={baseUrl + leader.image}
+                                alt={leader.name}
+                            />
+                        </Media>
+                        <Media body className='ml-5'>
+                            <Media heading>{leader.name}</Media>
+                            <p>{leader.designation}</p>
+                            <p>{leader.description}</p>
+                        </Media>
+                    </Media>
+                </div>
+            </Fade>
+        </Stagger>
+    );
+}
+
 function About(props) {
-    const leaders = props.leaders.map((leader) => {
-        return <RenderLeader leader={leader} />;
+    const leaders = props.leaders.leaders.map((leader) => {
+        return <RenderLeader leader={leader} key={leader.id} />;
     });
 
     return (
